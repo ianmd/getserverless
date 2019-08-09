@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Make a Contact Form for your Static Website using Serverless</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/getserverless/css/owl.carousel.css" />
+<link rel="stylesheet" href="/getserverless/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/getserverless/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/getserverless/css/airspace.css" />
+<link rel="stylesheet" href="/getserverless/css/style.css" />
+<link rel="stylesheet" href="/getserverless/css/ionicons.min.css" />
+<link rel="stylesheet" href="/getserverless/css/animate.css" />
+<link rel="stylesheet" href="/getserverless/css/responsive.css" />
+<link rel="stylesheet" href="/getserverless/css/syntax.css" />
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/getserverless/js/bootstrap.min.js"></script>
+<script src="/getserverless/js/owl.carousel.min.js"></script>
+<script src="/getserverless/js/plugins.js"></script>
+<script src="/getserverless/js/min/waypoints.min.js"></script>
+<script src="/getserverless/js/jquery.counterup.js"></script>
+<script src="/getserverless/js/typed.js"></script>
+
+
+<script src="/getserverless/js/main.js"></script>
+
+
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">
+              <img src="/getserverless/img/logo.png" alt="getServerLess">
+            </a>
+          </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="/getserverless/">Home</a></li>
+               <!--<li><a href="/getserverless/work">Work</a></li>-->
+                <li><a href="/getserverless/blog">Blog</a></li>
+                <!--<li><a href="#">Service</a></li>-->
+                <li><a href="/getserverless/contact">Contact</a></li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+      </div>
+    </div>
+  </div>
+</header><!-- header close -->
+
+
+
+    <div class="post">
+  <!-- Wrapper Start -->
+  <section id="intro" style="border: 1px dotted #ddd;">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="block">
+            <h1>Make a Contact Form for your Static Website using Serverless</h1>
+            <div class="post-info-wrapper">
+              <p class="italic">By <span class="bold">Mohammad N Alam</span> on <span class="bold">March 13, 2018</span></p>
+            </div>
+            <hr />
+            <p><p>Contact form is an indispensable part of a functional website. If you are running a static website, chances are you don’t have a server running. You don’t want to beat the purpose of having a static website by setting up a server, just for the contact form. You can create a cheap, robust and quick contact form using, AWS <a href="https://serverless.com">Lambda</a>, <a href="https://serverless.com">SES</a> and the <a href="https://serverless.com">Serverless</a> framework.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<ol>
+  <li>
+    <p>An <a href="https://serverless.com">AWS</a> account</p>
+  </li>
+  <li>
+    <p><a href="https://serverless.com">Serverless</a> installed</p>
+  </li>
+</ol>
+
+<h2 id="overview">Overview</h2>
+
+<p>We will collect the contact form data and have it sent to a specific email address. Using our contact form, we will send a <code class="highlighter-rouge">http</code> <strong>POST</strong> request to the <strong>API Gateway</strong>. This will act as an <strong>event</strong> to run our <a href="https://serverless.com">Lambda</a> function. The lambda function will process the data and send it to the specified email using AWS Simple Email Service(SES). To achieve this, we will add a simple contact form to our website. We will also give serverless framework admin level programmatic access to our AWS account. We will then modify <code class="highlighter-rouge">config.yml</code> created by serverless and write the code for our lambda function in <code class="highlighter-rouge">handler.js</code>. Finally, we will deploy our code to AWS using serverless.</p>
+
+<h2 id="html-form">HTML form</h2>
+
+<p>You can create your own contact form using HTML, CSS and JavaScript to suit the style of your website. For our purposes, we will write a basic HTML contact form. Go ahead and copy this in your <code class="highlighter-rouge">index.html</code>.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="s2">"API_GATEWAY_URL"</span> <span class="nb">method</span><span class="o">=</span><span class="s2">"POST"</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="n">input</span> <span class="n">type</span><span class="o">=</span><span class="s2">"text"</span> <span class="nb">name</span><span class="o">=</span><span class="s2">"name"</span> <span class="n">value</span><span class="o">=</span><span class="s2">"Enter Your Name"</span> <span class="o">/&gt;</span>
+            <span class="o">&lt;</span><span class="sr">/div&gt;
+            &lt;div&gt;
+                &lt;input type="text" name="email" value="Enter your email" /</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="sr">/div&gt;
+            &lt;div&gt;
+                &lt;textarea name="message"&gt;Enter your message&lt;/</span><span class="n">textarea</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="sr">/div&gt;
+            &lt;div&gt;
+                &lt;input type="submit" value="Send" /</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="sr">/div&gt;
+        &lt;/</span><span class="n">form</span><span class="o">&gt;</span></code></pre></figure>
+
+<h2 id="configure-iam">Configure IAM</h2>
+
+<p>We need to create an IAM (Identity and Access Management) role in our AWS account in order to grant Serverless access to our account. This will enable Serverless to make API calls. As we only need to give Serverless programmatic access, we don’t need to create a username and password for it. Rather, we would create an access key ID and a secret access key.</p>
+
+<h3 id="create-iam-role">Create IAM role</h3>
+
+<ol>
+  <li>
+    <p>Sign in to your AWS Management Console and open the <a href="https://console.aws.amazon.com/iam/">IAM Console</a>. Select <strong>Users</strong> and then choose <strong>Add User</strong>.</p>
+  </li>
+  <li>
+    <p>Type <strong>serverless</strong> as the user name and choose <strong>programmatic access</strong></p>
+  </li>
+  <li>
+    <p>Next, select <strong>Attach existing policies to user directly.</strong> and check <strong>Administrator Access.</strong></p>
+  </li>
+</ol>
+
+<blockquote>
+  <p><strong>Alternatively</strong>, if you have AWS CLI installed, you can skip this step and create IAM role using <a href="https://docs.aws.amazon.com/cli/latest/reference/iam/create-role.html">these</a> steps.</p>
+</blockquote>
+
+<p>Once user is created, you will see the <strong>Access Key ID</strong> and the <strong>Secret Access Key</strong> in front of the user name in your AWS Management Console. <strong>Copy</strong> these values and save it in your clipboard for the next step.</p>
+
+<h3 id="assign-iam-role-to-serverless">Assign IAM role to Serverless</h3>
+
+<p>In this step, we will use the Access Key to let serverless interact with our AWS Account.</p>
+
+<p>Launch terminal and enter this command</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">serverless</span> <span class="n">config</span> <span class="n">credentials</span> <span class="o">--</span><span class="n">provider</span> <span class="n">aws</span> <span class="o">--</span><span class="n">key</span> <span class="o">&lt;</span><span class="no">Access</span> <span class="no">Key</span> <span class="no">ID</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">secret</span> <span class="o">&lt;</span><span class="no">Secret</span> <span class="no">Key</span><span class="o">&gt;</span></code></pre></figure>
+
+<h2 id="create-a-service-in-aws">Create a Service in AWS</h2>
+
+<p>Now that we have connected the serverless framework to our AWS account, we’re ready to create a service using this framework. We are going to specify beforehand the <strong>path</strong> and the <strong>runtime</strong>. This will create a scaffold for our project in the language we want and the destination we assign. In this case it will be <strong>node.js</strong> and <strong>my-contact-form</strong> respectively. Go ahead and run this command to do this :</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">serverless</span> <span class="n">create</span> <span class="o">--</span><span class="n">template</span> <span class="n">aws</span><span class="o">-</span><span class="n">nodejs</span> <span class="o">--</span><span class="n">path</span> <span class="n">my</span><span class="o">-</span><span class="n">contact</span><span class="o">-</span><span class="n">form</span></code></pre></figure>
+
+<p>This command will also generate <code class="highlighter-rouge">handler.js</code> , <code class="highlighter-rouge">.gitignore</code> and <code class="highlighter-rouge">serverless.yml</code> files in our folder <code class="highlighter-rouge">my-contact-form</code>. <code class="highlighter-rouge">handler.js</code> is used to set up API gateway events and <code class="highlighter-rouge">severless.yml</code> is our configuration file. This configuration file contains a bunch of boilerplate settings. You can keep them all if you want to manage all aspects of the service. For brevity, we will delete it and paste this in the <code class="highlighter-rouge">serverless.yml</code> file.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">service: </span><span class="n">my</span><span class="o">-</span><span class="n">contact</span><span class="o">-</span><span class="n">form</span>
+
+<span class="ss">custom:
+  secrets: </span><span class="err">$</span><span class="p">{</span><span class="n">file</span><span class="p">(</span><span class="n">secrets</span><span class="p">.</span><span class="nf">json</span><span class="p">)}</span>
+
+<span class="ss">provider:
+  name: </span><span class="n">aws</span>
+  <span class="ss">runtime: </span><span class="n">nodejs8</span><span class="o">.</span><span class="mi">12</span>
+  <span class="ss">stage: </span><span class="err">$</span><span class="p">{</span><span class="nb">self</span><span class="ss">:custom</span><span class="p">.</span><span class="nf">secrets</span><span class="o">.</span><span class="no">NODE_ENV</span><span class="p">}</span>
+  <span class="ss">region: </span><span class="n">us</span><span class="o">-</span><span class="n">east</span><span class="o">-</span><span class="mi">1</span>
+  <span class="ss">environment: 
+    </span><span class="no">NODE_ENV</span><span class="p">:</span> <span class="err">$</span><span class="p">{</span><span class="nb">self</span><span class="ss">:custom</span><span class="p">.</span><span class="nf">secrets</span><span class="o">.</span><span class="no">NODE_ENV</span><span class="p">}</span>
+    <span class="no">EMAIL</span><span class="p">:</span> <span class="err">$</span><span class="p">{</span><span class="nb">self</span><span class="ss">:custom</span><span class="p">.</span><span class="nf">secrets</span><span class="o">.</span><span class="no">EMAIL</span><span class="p">}</span>
+    <span class="no">DOMAIN</span><span class="p">:</span> <span class="err">$</span><span class="p">{</span><span class="nb">self</span><span class="ss">:custom</span><span class="p">.</span><span class="nf">secrets</span><span class="o">.</span><span class="no">DOMAIN</span><span class="p">}</span>
+  <span class="ss">iamRoleStatements:
+    </span><span class="o">-</span> <span class="no">Effect</span><span class="p">:</span> <span class="s2">"Allow"</span>
+      <span class="no">Action</span><span class="p">:</span>
+        <span class="o">-</span> <span class="s2">"ses:SendEmail"</span>
+      <span class="no">Resource</span><span class="p">:</span> <span class="s2">"*"</span>
+<span class="ss">functions:
+  send:
+    handler: </span><span class="n">handler</span><span class="p">.</span><span class="nf">send</span>
+    <span class="ss">events:
+      </span><span class="o">-</span> <span class="ss">http:
+          path: </span><span class="n">email</span><span class="o">/</span><span class="nb">send</span>
+          <span class="ss">method: </span><span class="n">post</span>
+          <span class="ss">cors: </span><span class="kp">true</span></code></pre></figure>
+
+<h2 id="write-code-to-trigger-lambda">Write code to trigger Lambda</h2>
+
+<p><code class="highlighter-rouge">handler.js</code> is the file that holds the trigger for out lambda function. We are going to write the logic for .sendMail() method. As soon as the event is triggered, the handler.js will send an email. As we have chosen our runtime as node.js, we’re going to write the logic in this language. Feel free to adapt it to python if you chose that as your runtime.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">const</span> <span class="n">aws</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">'aws-sdk'</span><span class="p">)</span>
+<span class="n">const</span> <span class="n">ses</span> <span class="o">=</span> <span class="n">new</span> <span class="n">aws</span><span class="o">.</span><span class="no">SES</span><span class="p">()</span>
+<span class="n">const</span> <span class="n">myEmail</span> <span class="o">=</span> <span class="n">process</span><span class="p">.</span><span class="nf">env</span><span class="o">.</span><span class="no">EMAIL</span>
+<span class="n">const</span> <span class="n">myDomain</span> <span class="o">=</span> <span class="n">process</span><span class="p">.</span><span class="nf">env</span><span class="o">.</span><span class="no">DOMAIN</span>
+
+<span class="n">function</span> <span class="n">generateResponse</span> <span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="ss">statusCode: </span><span class="n">code</span><span class="p">,</span>
+    <span class="ss">headers: </span><span class="p">{</span>
+      <span class="s1">'Access-Control-Allow-Origin'</span><span class="p">:</span> <span class="n">myDomain</span><span class="p">,</span>
+      <span class="s1">'Access-Control-Allow-Headers'</span><span class="p">:</span> <span class="s1">'x-requested-with'</span><span class="p">,</span>
+      <span class="s1">'Access-Control-Allow-Credentials'</span><span class="p">:</span> <span class="kp">true</span>
+    <span class="p">},</span>
+    <span class="ss">body: </span><span class="no">JSON</span><span class="p">.</span><span class="nf">stringify</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">function</span> <span class="n">generateError</span> <span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="ss">statusCode: </span><span class="n">code</span><span class="p">,</span>
+    <span class="ss">headers: </span><span class="p">{</span>
+      <span class="s1">'Access-Control-Allow-Origin'</span><span class="p">:</span> <span class="n">myDomain</span><span class="p">,</span>
+      <span class="s1">'Access-Control-Allow-Headers'</span><span class="p">:</span> <span class="s1">'x-requested-with'</span><span class="p">,</span>
+      <span class="s1">'Access-Control-Allow-Credentials'</span><span class="p">:</span> <span class="kp">true</span>
+    <span class="p">},</span>
+    <span class="ss">body: </span><span class="no">JSON</span><span class="p">.</span><span class="nf">stringify</span><span class="p">(</span><span class="n">err</span><span class="p">.</span><span class="nf">message</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">function</span> <span class="n">generateEmailParams</span> <span class="p">(</span><span class="n">body</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">const</span> <span class="p">{</span> <span class="n">email</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="n">content</span> <span class="p">}</span> <span class="o">=</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+  <span class="n">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">email</span> <span class="o">&amp;&amp;</span> <span class="nb">name</span> <span class="o">&amp;&amp;</span> <span class="n">content</span><span class="p">))</span> <span class="p">{</span>
+    <span class="kp">throw</span> <span class="n">new</span> <span class="no">Error</span><span class="p">(</span><span class="s1">'Missing parameters! Make sure to add parameters \'email\', \'name\', \'content\'.'</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="no">Source</span><span class="p">:</span> <span class="n">myEmail</span><span class="p">,</span>
+    <span class="no">Destination</span><span class="p">:</span> <span class="p">{</span> <span class="no">ToAddresses</span><span class="p">:</span> <span class="p">[</span><span class="n">myEmail</span><span class="p">]</span> <span class="p">},</span>
+    <span class="no">ReplyToAddresses</span><span class="p">:</span> <span class="p">[</span><span class="n">email</span><span class="p">],</span>
+    <span class="no">Message</span><span class="p">:</span> <span class="p">{</span>
+      <span class="no">Body</span><span class="p">:</span> <span class="p">{</span>
+        <span class="no">Text</span><span class="p">:</span> <span class="p">{</span>
+          <span class="no">Charset</span><span class="p">:</span> <span class="s1">'UTF-8'</span><span class="p">,</span>
+          <span class="no">Data</span><span class="p">:</span> <span class="sb">`Message sent from email ${email} by ${name} </span><span class="se">\n</span><span class="sb">Content: ${content}`</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="no">Subject</span><span class="p">:</span> <span class="p">{</span>
+        <span class="no">Charset</span><span class="p">:</span> <span class="s1">'UTF-8'</span><span class="p">,</span>
+        <span class="no">Data</span><span class="p">:</span> <span class="sb">`You received a message from ${myDomain}!`</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">module</span><span class="p">.</span><span class="nf">exports</span><span class="p">.</span><span class="nf">send</span> <span class="o">=</span> <span class="n">async</span> <span class="p">(</span><span class="n">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="n">try</span> <span class="p">{</span>
+    <span class="n">const</span> <span class="n">emailParams</span> <span class="o">=</span> <span class="n">generateEmailParams</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="nf">body</span><span class="p">)</span>
+    <span class="n">const</span> <span class="n">data</span> <span class="o">=</span> <span class="n">await</span> <span class="n">ses</span><span class="p">.</span><span class="nf">sendEmail</span><span class="p">(</span><span class="n">emailParams</span><span class="p">).</span><span class="nf">promise</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">generateResponse</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+  <span class="p">}</span> <span class="kp">catch</span> <span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">generateError</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="deploy">Deploy</h2>
+
+<p>This is quite simple with the serverless framework. Run this command on your terminal:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">serverless</span> <span class="n">deploy</span></code></pre></figure>
+
+<p>That’s it! You have successfully created your contact form which sends the user data as an email to you. All you need is a cup of coffee and cherish your static website without worrying about – servers!</p>
+
+</p>
+          </div>
+        </div><!-- .col-md-7 close -->
+      </div>
+    </div>
+  </section>
+</div>
+<p class="center-text" style="padding: 30px;">
+  <a href="/getserverless/blog">Back to blog</a>
+</p>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <!--<li><a href="#">About Us</a></li> -->
+            <li><a href="/getserverless/contact">Contact us</a></li>
+            <!--<li><a href="#">How it works</a></li> -->
+            <li><a href="/getserverless/blog">Blog</a></li>
+            <!--<li><a href="#">Terms</a></li>-->
+          </ul>
+        </div>
+        <p>Copyright &copy; Designed &amp; Developed by <a href="https://getserverless.com">getServerLess</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>

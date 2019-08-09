@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>A simple way to use any Jekyll Plugin on gh-pages</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/getserverless/css/owl.carousel.css" />
+<link rel="stylesheet" href="/getserverless/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/getserverless/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/getserverless/css/airspace.css" />
+<link rel="stylesheet" href="/getserverless/css/style.css" />
+<link rel="stylesheet" href="/getserverless/css/ionicons.min.css" />
+<link rel="stylesheet" href="/getserverless/css/animate.css" />
+<link rel="stylesheet" href="/getserverless/css/responsive.css" />
+<link rel="stylesheet" href="/getserverless/css/syntax.css" />
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/getserverless/js/bootstrap.min.js"></script>
+<script src="/getserverless/js/owl.carousel.min.js"></script>
+<script src="/getserverless/js/plugins.js"></script>
+<script src="/getserverless/js/min/waypoints.min.js"></script>
+<script src="/getserverless/js/jquery.counterup.js"></script>
+<script src="/getserverless/js/typed.js"></script>
+
+
+<script src="/getserverless/js/main.js"></script>
+
+
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">
+              <img src="/getserverless/img/logo.png" alt="getServerLess">
+            </a>
+          </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="/getserverless/">Home</a></li>
+               <!--<li><a href="/getserverless/work">Work</a></li>-->
+                <li><a href="/getserverless/blog">Blog</a></li>
+                <!--<li><a href="#">Service</a></li>-->
+                <li><a href="/getserverless/contact">Contact</a></li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+      </div>
+    </div>
+  </div>
+</header><!-- header close -->
+
+
+
+    <div class="post">
+  <!-- Wrapper Start -->
+  <section id="intro" style="border: 1px dotted #ddd;">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="block">
+            <h1>A simple way to use any Jekyll Plugin on gh-pages</h1>
+            <div class="post-info-wrapper">
+              <p class="italic">By <span class="bold">Mohammad N Alam</span> on <span class="bold">September 20, 2016</span></p>
+            </div>
+            <hr />
+            <p><p><a href="https://pages.github.com/">GitHub Pages</a> is a great platform to publish your jekyll generated static website. GitHub lets you host your site for free. However, the scope of officially supported jekyll plugins is very limited. For a blog, for example, if you want to implement a search feature, you do not have any option. But an unofficial gem packed plugin called <a href="https://github.com/algolia/jekyll-algolia">Algolia</a> can solve this problem in a snap. There are other very useful plugins like <a href="https://github.com/jekyll/jekyll-archives">Archives</a>, <a href="https://github.com/jekyll/jekyll-mentions">Mentions</a> and <a href="https://github.com/bdesham/reading_time">Reading Time</a> for a blog.</p>
+
+<p>The reason <a href="https://pages.github.com/">Github</a> pages doesn’t build with unofficial plugins is because they don’t want any third party codes running on their servers. But we can still host a <strong>prebuilt</strong> jekyll site for free as a plane old HTML <em>static</em> site.In this post we will use a utility called <a href="https://rubygems.org/gems/rake/versions/11.2.2">Rake</a>. Rake is simply defined as a <em>Make-like</em> program implemented in <a href="https://www.ruby-lang.org/en/">Ruby</a>. Rake will automate the process for building and extracting just the <em>static</em> assets for deployment.</p>
+
+<h2 id="overview">Overview</h2>
+
+<p>We will build the site on our local machine with all the desired plugins. We will name this directory as <code class="highlighter-rouge">project_site</code>. Post build, we will copy just the static files from <code class="highlighter-rouge">_site</code> folder to a new directory called <code class="highlighter-rouge">static_site</code> using <a href="https://rubygems.org/gems/rake/versions/11.2.2">Rake</a>. Finally, we will deploy the static files from the <code class="highlighter-rouge">static_site</code> directory to gh-pages.</p>
+
+<h2 id="set-up-the-directories">Set Up the Directories</h2>
+
+<ol>
+  <li>
+    <p><strong>Rename</strong> your jekyll site directory to <code class="highlighter-rouge">project_site</code>.</p>
+  </li>
+  <li>
+    <p><strong>Create</strong> a new directory in the root and name it <code class="highlighter-rouge">static_site</code></p>
+  </li>
+  <li>
+    <p>Go to your <code class="highlighter-rouge">project_site</code> and <strong>create</strong> a <code class="highlighter-rouge">Rakefile</code></p>
+  </li>
+</ol>
+
+<h2 id="rakefile">Rakefile</h2>
+
+<p>Add the following code to your <code class="highlighter-rouge">Rakefile</code></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">deploy_dir</span> <span class="o">=</span> <span class="s2">"static_site"</span>
+
+<span class="n">desc</span> <span class="s2">"build and export static files"</span>
+<span class="n">task</span> <span class="ss">:export</span> <span class="k">do</span>
+  <span class="nb">system</span> <span class="s2">"jekyll export"</span>
+  <span class="nb">system</span> <span class="s2">"rm -r ../</span><span class="si">#{</span><span class="n">deploy_DIR</span><span class="si">}</span><span class="s2">/*"</span> <span class="k">unless</span> <span class="no">Dir</span><span class="p">[</span><span class="s1">'../#{deploy_DIR}/*'</span><span class="p">].</span><span class="nf">empty?</span>
+  <span class="nb">system</span> <span class="s2">"cp -r _site/* ../</span><span class="si">#{</span><span class="n">deploy_DIR</span><span class="si">}</span><span class="s2">/"</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>The <code class="highlighter-rouge">Rakefile</code> above will do the following</p>
+
+<ol>
+  <li><strong>Run</strong> <code class="highlighter-rouge">jekyll build</code> for you</li>
+  <li><strong>Empty</strong> the <code class="highlighter-rouge">static_site</code> folder</li>
+  <li><strong>Copy</strong> the <em>generated</em> static files from <code class="highlighter-rouge">_site</code> folder</li>
+  <li><strong>Paste</strong> the static files to <code class="highlighter-rouge">static_site</code> folder</li>
+</ol>
+
+<blockquote>
+  <p>Before running the <code class="highlighter-rouge">Rakefile</code> we need to <strong>exclude</strong> it in the <code class="highlighter-rouge">_config.yml</code>. This will prevent it from building in to <code class="highlighter-rouge">_site</code> folder.</p>
+</blockquote>
+
+<p>Add the following to your <code class="highlighter-rouge">_config.yml</code></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"> <span class="ss">exclude: </span><span class="p">[</span><span class="no">Rakefile</span><span class="p">]</span></code></pre></figure>
+
+<h2 id="build-and-deploy">Build and Deploy</h2>
+
+<p>Now that our <code class="highlighter-rouge">Rakefile</code> is ready, we will <strong>Run</strong> it to build the jekyll site. Instead of <code class="highlighter-rouge">jekyll build</code> we will run the <code class="highlighter-rouge">jekyll export</code>
+command.</p>
+
+<p><strong>cd</strong> in to <code class="highlighter-rouge">project_site</code> and <strong>Run</strong></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"> <span class="n">jekyll</span> <span class="n">export</span></code></pre></figure>
+
+<p>Since we are building our site <strong>locally</strong> and uploading just the static files, we need to tell <a href="https://pages.github.com/">GitHub Pages</a> to ignore it as jekyll files and prevent it from building on their servers. To do this we will add a <code class="highlighter-rouge">.nojekyll</code> file to the <code class="highlighter-rouge">static_site</code> folder.</p>
+
+<p><strong>cd</strong> in to <code class="highlighter-rouge">static_site</code> and <strong>Run</strong></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"> <span class="n">touch</span> <span class="p">.</span><span class="nf">nojekyll</span></code></pre></figure>
+
+<p>Finally, to deploy the static files, <strong>Run</strong></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"> <span class="n">git</span> <span class="n">add</span> <span class="o">--</span><span class="n">all</span>
+
+ <span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">"built site locally"</span>
+
+ <span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">master</span></code></pre></figure>
+
+<h2 id="result">Result</h2>
+
+<p>Now our <em>static</em> website should be up and running. Everytime when you make any changes to your site or blog, you can repeat the process above for deployment. We can now use any of the amazing open source plugin libraries for our jekyll sites. You can also expand your <code class="highlighter-rouge">Rakefile</code> to automate further steps involved in deploying namely change directory, add and commit changes, and upload the code to GitHub pages.</p>
+
+</p>
+          </div>
+        </div><!-- .col-md-7 close -->
+      </div>
+    </div>
+  </section>
+</div>
+<p class="center-text" style="padding: 30px;">
+  <a href="/getserverless/blog">Back to blog</a>
+</p>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <!--<li><a href="#">About Us</a></li> -->
+            <li><a href="/getserverless/contact">Contact us</a></li>
+            <!--<li><a href="#">How it works</a></li> -->
+            <li><a href="/getserverless/blog">Blog</a></li>
+            <!--<li><a href="#">Terms</a></li>-->
+          </ul>
+        </div>
+        <p>Copyright &copy; Designed &amp; Developed by <a href="https://getserverless.com">getServerLess</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>
